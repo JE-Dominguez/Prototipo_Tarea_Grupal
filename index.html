@@ -557,10 +557,10 @@ let DB = {
   ],
   tareas: JSON.parse(localStorage.getItem('db_tareas')) || [
     {titulo:'Ejercicios álgebra cap. 5',    materia:'Matemáticas', fechaIni:'01/02/2026',      fecha:'03/03/2026',estado:'Pendiente',pts:10,grado:'9° B'},
-    {titulo:'Lectura "Cien años de soledad"',materia:'Español',   fechaIni:'02/03/2026',       fecha:'05/03/2026',estado:'Pendiente',pts:15,grado:'9° B'},
-    {titulo:'Mapa ecosistemas Honduras',    materia:'Ciencias Naturales', fechaIni:'03/04/2026', fecha:'28/02/2026',estado:'Entregado', pts:20,grado:'9° B'},
-    {titulo:'Línea de tiempo Guerra Fría',  materia:'Historia',  fechaIni:'04/05/2026',        fecha:'07/03/2026',estado:'Pendiente',pts:10,grado:'9° B'},
-    {titulo:'Essay "My School"',            materia:'Inglés',  fechaIni:'05/06/2026',          fecha:'04/03/2026',estado:'Pendiente',pts:10,grado:'9° B'},
+    {titulo:'Lectura "Cien años de soledad"',materia:'Español',   fechaIni:'02/02/2026',       fecha:'05/03/2026',estado:'Pendiente',pts:15,grado:'9° B'},
+    {titulo:'Mapa ecosistemas Honduras',    materia:'Ciencias Naturales', fechaIni:'03/02/2026', fecha:'28/02/2026',estado:'Pendiente', pts:20,grado:'9° B'},
+    {titulo:'Línea de tiempo Guerra Fría',  materia:'Historia',  fechaIni:'04/02/2026',        fecha:'07/03/2026',estado:'Pendiente',pts:10,grado:'9° B'},
+    {titulo:'Essay "My School"',            materia:'Inglés',  fechaIni:'05/02/2026',          fecha:'04/03/2026',estado:'Pendiente',pts:10,grado:'9° B'},
   ],
   pagos: JSON.parse(localStorage.getItem('db_pagos')) || [
     {ref:'PAG-0041',alumno:'Kevin Martínez',   concepto:'Mensualidad Febrero',monto:800,fecha:'05/02/2026',estado:'Pagado'},
@@ -1148,12 +1148,14 @@ function renderAluTareas() {
   document.getElementById('pageContent').innerHTML = `
 <div class="card-base">
   <div class="chr"><span class="ct"><i class="bi bi-journal-text me-2"></i>Mis Tareas y Actividades</span><span class="bd bd-amber">${DB.tareas.filter(t=>t.estado==='Pendiente').length} pendientes</span></div>
-  <table class="tbl"><thead><tr><th>Tarea</th><th>Materia</th><th>Fecha Inicio</th><th>Fecha límite</th><th>Puntos</th><th>Estado</th><th>Acciones</th></tr></thead>
+  <table class="tbl"><thead><tr><th>Tarea</th><th>Materia</th><th>Fecha Inicio</th><th>Fecha límite</th><th>Fecha Entrega</th><th>Puntos</th><th>Estado</th><th>Acciones</th></tr></thead>
   <tbody>${DB.tareas.map(t=>`<tr>
     <td style="font-weight:700;">${t.titulo}</td>
     <td>${t.materia}</td>
    <td><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-family:'JetBrains Mono';"><i class="bi bi-calendar-plus" style="color:var(--green);"></i>${t.fechaIni||'—'}</span></td>
 <td><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-family:'JetBrains Mono';"><i class="bi bi-calendar-check" style="color:var(--red);"></i>${t.fecha}</span></td>
+<td><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-family:'JetBrains Mono';"><i class="bi bi-calendar-plus" style="color:var(--green);"></i>${t.fechaEntrega||'—'}</span></td>
+
     <td><span class="bd bd-blue">${t.pts} pts</span></td>
     <td><span class="bd ${t.estado==='Entregado'?'bd-green':'bd-amber'}">${t.estado}</span></td>
     <td><div class="d-flex gap-1"><button class="btn-ico" onclick="toast('Marcando como entregada...','ok')" aria-label="Marcar como entregada"><i class="bi bi-check2"></i></button></div></td>
@@ -1435,12 +1437,13 @@ function renderMaeTareas() {
 </div>
 <div class="card-base">
   <div class="chr"><span class="ct"><i class="bi bi-journal-text me-2" aria-hidden="true"></i>Tareas y Exámenes</span></div>
-  <table class="tbl"><thead><tr><th>Título</th><th>Materia</th><th>Grado</th><th>Fecha Entrega</th><th>Puntos</th><th>Entregadas</th><th>Acciones</th></tr></thead>
+  <table class="tbl"><thead><tr><th>Título</th><th>Materia</th><th>Grado</th><th>Fecha Inicio</th><th>Fecha Limite</th><th>Puntos</th><th>Entregadas</th><th>Acciones</th></tr></thead>
   <tbody id="tbMaeTareas">${DB.misTareas.map(t=>`<tr>
     <td style="font-weight:700;">${t.titulo}</td>
     <td>${t.materia}</td>
     <td><span class="bd bd-blue">${t.grado}</span></td>
-    <td><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-family:'JetBrains Mono';"><i class="bi bi-calendar-check" style="color:var(--red);"></i>${t.fecha}</span></td>
+  <td><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-family:'JetBrains Mono';"><i class="bi bi-calendar-plus" style="color:var(--green);"></i>${t.fechaIni||'—'}</span></td>
+<td><span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-family:'JetBrains Mono';"><i class="bi bi-calendar-check" style="color:var(--red);"></i>${t.fecha}</span></td>
     <td><span class="bd bd-violet">${t.pts} pts</span></td>
     <td>
       <div class="d-flex align-items-center gap-2">
